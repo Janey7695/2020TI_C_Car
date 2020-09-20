@@ -14,5 +14,7 @@ void Delay_us(int us);
 void Delay_ms(int ms);
 void Clock_Init();
 void Gpio_Init();
+void Uart_Init();
+void printf(unsigned char* str);
 
 #endif /* SYS_H_ */
