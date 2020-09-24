@@ -59,6 +59,7 @@ void Gpio_Init()
     P2SEL1 &= ~(BIT0 | BIT1);
     PM5CTL0 &= ~LOCKLPM5; //退出LPM5模式
     P1DIR|=BIT0;
+    P2DIR|=BIT7;   //P2.6->Echo   P2.7->Trig
     P8DIR|=BIT6+BIT7+BIT4+BIT5;
 }
 
@@ -78,8 +79,20 @@ void Uart_Init()
     UCA0CTLW0 &= ~UCSWRST;                    // Initialize eUSCI
     UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
 
-    __bis_SR_register(GIE);       // Enter LPM3, interrupts enabled
+    __bis_SR_register(GIE);       //  interrupts enabled
 }
+
+/*
+ * 计时器 用于超声波测距仪
+ *
+ */
+void TimerA_Init()
+{
+    TA0CCTL0 = CCIE;                          // TACCR0 interrupt enabled
+    //TA0CCR0 = 50000;
+    TA0CTL = TASSEL__SMCLK | MC__STOP|ID__8;          // SMCLK, UP mode,idv 8
+}
+
 
 void printf(unsigned char str[])
 {
