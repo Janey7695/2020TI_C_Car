@@ -70,15 +70,12 @@ void Speed_2test()
 }
 void Speed_3test()
 {
-    int8 i;
-    for(i=0;i<200;i++)
-    {
-
-        Left_Stop();
-        Delay_us(10);
-        Left_Ahead();
-        Delay_us(190);
-    }
+    TA1CCR0 = 50;                          // PWM Period
+    TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
+    TA1CCR1 = 40;                             // CCR1 PWM duty cycle
+    TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
+    TA1CCR2 = 40;                             // CCR2 PWM duty cycle
+    TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR
 }
 /*
  * 通过设置占空比模拟PWM输出控制电机转速

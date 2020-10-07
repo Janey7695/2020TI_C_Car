@@ -8,8 +8,7 @@
 #ifndef MOTORCTL_H_
 #define MOTORCTL_H_
 
-#define int8 volatile unsigned char
-#define int16 volatile unsigned int
+#include <config.h>
 
 void Left_Ahead();
 void Right_Ahead();
