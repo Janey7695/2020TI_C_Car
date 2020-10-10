@@ -10,16 +10,9 @@
 
 #include <config.h>
 
-void Left_Ahead();
-void Right_Ahead();
-void Left_Stop();
-void Right_Stop();
-void Left_Back();
-void Right_Back();
 void Speed_1test();
 void Speed_2test();
 void Speed_3test();
-void Left_Ahead_Speed(int8 Perstop,int8 Perahead,int8 time);
-void Right_Ahead_Speed(int8 Perstop,int8 Perahead,int8 time);
+void Turn(unsigned char lefP,unsigned char rightP,unsigned int Ms);
 
 #endif /* MOTORCTL_H_ */

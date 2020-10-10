@@ -83,7 +83,9 @@ void Gpio_Init()
     P3OUT&=~BIT0;
     P3OUT&=~BIT6;
     PM5CTL0 &= ~LOCKLPM5; //退出LPM5模式
-    P1DIR|=BIT0;
+    P1DIR|=BIT0; //led灯
+    P8DIR&=~BIT4; //红外灯接收右
+    P8DIR&=~BIT5; //红外灯接收左
 }
 /*
  * 串口初始化
@@ -109,17 +111,6 @@ void Uart_Init()
     __bis_SR_register(GIE);       //  interrupts enabled
 }
 
-///*
-// * 计时器 用于超声波测距仪
-// *
-// */
-//void TimerA_Init()
-//{
-//    TA1CCTL1 = CCIE;                          // TACCR0 interrupt enabled
-////    TA1CCR1 = 400;
-//    TA1CTL |= TASSEL__SMCLK | MC__CONTINUOUS|ID__8;          // SMCLK, UP mode,idv 8
-//    TA1CCTL1|=CM_3|CCIS_0|CAP|SCS;
-//}
 
 /*
  * 串口打印函数
