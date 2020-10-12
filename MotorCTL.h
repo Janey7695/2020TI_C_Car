@@ -10,9 +10,7 @@
 
 #include <config.h>
 
-void Speed_1test();
-void Speed_2test();
-void Speed_3test();
+void Go_ahead();
 void Turn(unsigned char lefP,unsigned char rightP,unsigned int Ms);
 void Stop();
 #endif /* MOTORCTL_H_ */

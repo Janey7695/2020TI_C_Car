@@ -8,20 +8,18 @@
 
 int8 rightflag=0;
 int8 Bigrightflag=0;
-int8 CHO=0;
-int8 MODE=1;
-int8 OK=0;
 int8 teth=0;
 int16 tethtimelen;
 int8 num[6];
 
 //void ChangeNum2Char(int16 Num)
 //{
-//    num[0]=Num/10000;
-//    num[1]=Num%10000/1000;
-//    num[2]=Num%10000%1000/100;
-//    num[3]=Num%10000%1000%100/10;
-//    num[4]=Num%10000%1000%100%10;
+//
+//    num[0]=Num/10000+'0';
+//    num[1]=Num%10000/1000+'0';
+//    num[2]=Num%10000%1000/100+'0';
+//    num[3]=Num%10000%1000%100/10+'0';
+//    num[4]=Num%10000%1000%100%10+'0';
 //}
 int main(void)
 {
@@ -33,78 +31,67 @@ int main(void)
     //printf("Initialization Finish!",1);
     OLED_Clear();
     OLED_ShowStr(0,0,"Init Finish",16);
-//    OLED_ShowStr(0,2,"Hit Up/Down to choice MODE",16);
-//    // TODO : "Hit Up\Down to choice MODE"
-//    while(!OK)
-//    {
-//        _DINT();
-//        OLED_ShowStr(0,6,"MODE:",16);
-//        OLED_ShowChar(40,6,MODE+48,16);
-//        _EINT();
-//        Delay_ms(200);
-//    }
-            Speed_3test();//前行
-            while(1)
+    OLED_ShowChar(0,6,teth+'0',16);
+    Go_ahead();//前行
+    while(1)
+    {
+        while((!(P8IN&BIT4))&&(!(P8IN&BIT5)))
+        {
+            OLED_ShowStr(0,4,"Stop way1!",16);
+            Stop();
+        }
+        while(rightflag)
+        {
+            OLED_ShowStr(0,2,"Turn Brigh!",16);
+            // printf("turn right!",1);
+            //Turn(15,35,200);
+            P3OUT|=BIT6;
+            Turn(22,35,50);
+            rightflag--;
+        }
+        while(Bigrightflag)
+        {
+            OLED_ShowStr(0,2,"Turn BBigh!",16);
+            // printf("turn right!",1);
+            //Turn(20,40,200);
+            P3OUT|=BIT6;
+            Turn(30,35,50);
+            Bigrightflag--;
+
+        }
+        while(!(P8IN&BIT4))//右红外检测到嘿块 小车右转1.3s
+        {
+            if(!(P8IN&BIT5))
             {
-                while((!(P8IN&BIT4))&&(!(P8IN&BIT5)))
-                {
-                    OLED_ShowStr(0,4,"Stop way1!",16);
-                    Stop();
-                }
-                while(rightflag)
-                {
-                    OLED_ShowStr(0,2,"Turn Brigh!",16);
-                     // printf("turn right!",1);
-                      //Turn(15,35,200);
-                        P3OUT|=BIT6;
-                        Turn(15,35,20);
-                        rightflag--;
+                OLED_ShowStr(0,4,"Stop way2!",16);
+                Stop();
+            }
+            else
+            {
+                OLED_ShowStr(0,2,"Turn right!",16);
+                // printf("turn right!",1);
+                Turn(20,3,50);
+            }
+        }
+        while(!(P8IN&BIT5))//左红外检测到嘿块 小车左转100ms
+        {
+            if(!(P8IN&BIT4))
+            {
+                OLED_ShowStr(0,4,"Stop way2!",16);
+                Stop();
+            }
+            else
+            {
+                OLED_ShowStr(0,2,"Turn left! ",16);
+                //  printf("turn left!",1);
+                Turn(3,20,50);
+            }
+        }
+        OLED_ShowStr(0,2,"Go  ahead! ",16);
+        //printf("go straight!",1);
+        P1OUT|=BIT0;//led 亮
 
-                }
-                while(Bigrightflag)
-                {
-                    OLED_ShowStr(0,2,"Turn BBigh!",16);
-                             // printf("turn right!",1);
-                              //Turn(20,40,200);
-                        P3OUT|=BIT6;
-                        Turn(15,35,20);
-                        Bigrightflag--;
-
-                }
-                while(!(P8IN&BIT4))//右红外检测到嘿块 小车右转1.3s
-                {
-                     if(!(P8IN&BIT5))
-                     {
-                         OLED_ShowStr(0,4,"Stop way2!",16);
-                         Stop();
-                     }
-                     else
-                     {
-                         OLED_ShowStr(0,2,"Turn right!",16);
-                               // printf("turn right!",1);
-                         Turn(20,3,50);
-                     }
-                }
-                while(!(P8IN&BIT5))//左红外检测到嘿块 小车左转100ms
-                {
-                      if(!(P8IN&BIT4))
-                      {
-                          OLED_ShowStr(0,4,"Stop way2!",16);
-                          Stop();
-                      }
-                      else
-                      {
-                          OLED_ShowStr(0,2,"Turn left! ",16);
-                              //  printf("turn left!",1);
-                          Turn(3,20,50);
-                      }
-                }
-                OLED_ShowStr(0,2,"Go  ahead! ",16);
-                        //printf("go straight!",1);
-                P1OUT|=BIT0;//led 亮
-
-                }
-
+    }
 
 }
 //#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
@@ -151,7 +138,7 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG3 : break;
         case P1IV_P1IFG4 :
         {
-            rightflag+=5;
+            rightflag+=4;
             P1IFG &= ~BIT1;                           // Clear P1.1 IFG
             break;
         }
@@ -160,11 +147,12 @@ __interrupt void PORT1_ISR(void)
         {
             teth+=1;
             P1IFG &= ~BIT5;
+            break;
         }
         case P1IV_P1IFG6 : break;
         case P1IV_P1IFG7 :
             {
-                Bigrightflag+=5;
+                Bigrightflag+=4;
                 P1IFG &= ~BIT7;
                 break;
             }

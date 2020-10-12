@@ -19,38 +19,18 @@ void Turn(unsigned char lefP,unsigned char rightP,unsigned int Ms)
     TA1CCR2 = lefP;                             // CCR2 PWM duty cycle
     TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR   Delay_us(150);
     Delay_ms(Ms);
-    Speed_3test();
+    Go_ahead();
 }
 
-//不同前进速度
-void Speed_1test()
-{
-    TA1CCR0 = 50;                          // PWM Period
-            TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
-            TA1CCR1 = 25;                             // CCR1 PWM duty cycle
-            TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
-            TA1CCR2 = 25;                             // CCR2 PWM duty cycle
-            TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR   Delay_us(150);
-            P3OUT|=BIT6;
-}
-void Speed_2test()
-{
-    TA1CCR0 = 50-1;                          // PWM Period
-        TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
-        TA1CCR1 = 12;                             // CCR1 PWM duty cycle
-        TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
-        TA1CCR2 = 45;                             // CCR2 PWM duty cycle
-        TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR   Delay_us(150);
 
-}
-void Speed_3test()
+void Go_ahead()
 {
     P3OUT&=~BIT6;
     TA1CCR0 = 50-1;                          // PWM Period
     TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
-    TA1CCR1 = 12;                             // CCR1 PWM duty cycle
+    TA1CCR1 = 15;                             // CCR1 PWM duty cycle
     TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
-    TA1CCR2 = 12;                             // CCR2 PWM duty cycle
+    TA1CCR2 = 15;                             // CCR2 PWM duty cycle
     TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR
 }
 

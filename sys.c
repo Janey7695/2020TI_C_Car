@@ -73,16 +73,20 @@ void Gpio_Init()
 
     P2SEL0 |= BIT0 | BIT1;                    // 开放P2.0作为TxD P2.1为RxD
     P2SEL1 &= ~(BIT0 | BIT1);
+
+    //P1.3 ->右轮 P3.3 ->左轮
     P1DIR |=  BIT3;                     // P1.3  output 左
     P1SEL0 |=  BIT3;                    //  P1.3 options select
     P3DIR |=  BIT3;                     //  P3.3 output 右
     P3SEL0 &=~BIT3;                    // P3.3 options select
     P3SEL1 |= BIT3;                    // P3.3 options select
-    PJSEL0 |= BIT4 | BIT5;
     P3DIR |=BIT0|BIT6;
+    PJSEL0 |= BIT4 | BIT5; //TODO:这啥？？？？
     P3OUT&=~BIT0;
     P3OUT&=~BIT6;
+
     PM5CTL0 &= ~LOCKLPM5; //退出LPM5模式
+
     P1DIR|=BIT0; //led灯
     P8DIR&=~BIT4; //红外灯接收右
     P8DIR&=~BIT5; //红外灯接收左
