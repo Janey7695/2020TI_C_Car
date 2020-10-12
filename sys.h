@@ -16,5 +16,6 @@ void Clock_Init();
 void Gpio_Init();
 void Uart_Init();
 void printf(unsigned char* str,unsigned char ent);
+void TimerA0_Init();
 
 #endif /* SYS_H_ */

@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./MotorCTL.obj" \
 "./main.obj" \
+"./oled.obj" \
 "./sys.obj" \
 "../lnk_msp430fr6989.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -158,8 +159,8 @@ motor_control.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "MotorCTL.obj" "main.obj" "sys.obj" 
-	-$(RM) "MotorCTL.d" "main.d" "sys.d" 
+	-$(RM) "MotorCTL.obj" "main.obj" "oled.obj" "sys.obj" 
+	-$(RM) "MotorCTL.d" "main.d" "oled.d" "sys.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

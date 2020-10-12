@@ -73,9 +73,9 @@ void Gpio_Init()
 
     P2SEL0 |= BIT0 | BIT1;                    // 开放P2.0作为TxD P2.1为RxD
     P2SEL1 &= ~(BIT0 | BIT1);
-    P1DIR |=  BIT3;                     // P1.3  output
+    P1DIR |=  BIT3;                     // P1.3  output 左
     P1SEL0 |=  BIT3;                    //  P1.3 options select
-    P3DIR |=  BIT3;                     //  P3.3 output
+    P3DIR |=  BIT3;                     //  P3.3 output 右
     P3SEL0 &=~BIT3;                    // P3.3 options select
     P3SEL1 |= BIT3;                    // P3.3 options select
     PJSEL0 |= BIT4 | BIT5;
@@ -86,6 +86,50 @@ void Gpio_Init()
     P1DIR|=BIT0; //led灯
     P8DIR&=~BIT4; //红外灯接收右
     P8DIR&=~BIT5; //红外灯接收左
+    P8DIR|=BIT6+BIT7; //P8.6 ->D0 SCL P8.7 ->D1 SDIN
+    P9DIR|=BIT0+BIT1+BIT5; //P9.0 -> rst P9.1 ->DC P9.5 ->CS
+    P2DIR|=BIT6; //蜂鸣器
+
+    P1DIR&=~BIT4;   //红外接收右二
+    P1IES |= BIT4;                             // P1.1 Hi/Lo edge
+    P1IFG = 0;                                // Clear all P1 interrupt flags
+    P1IE |= BIT4;                              // P1.1 interrupt enabled
+    P1DIR&=~BIT7; //红外接收右三
+    P1IES |= BIT7;                             // P1.1 Hi/Lo edge
+    P1IFG = 0;                                // Clear all P1 interrupt flags
+    P1IE |= BIT7;                              // P1.1 interrupt enabled
+    P1DIR&=~BIT5; //红外测速
+    P1IES |= BIT5;                             // P1.1 Hi/Lo edge
+    P1IFG = 0;                                // Clear all P1 interrupt flags
+    P1IE |= BIT5;                              // P1.1 interrupt enabled
+
+//    P2DIR&=~BIT3; // OK
+//    P2OUT|=BIT3;                             // Pull-up resistor on P1.1
+//    P2REN|= BIT3;                             // Select pull-up mode for P1.1
+//    P2IES|=BIT3; // hi\lo
+//    P2IFG = 0;
+//    P2IE |= BIT3;
+//    P2DIR&=~BIT4; // UP
+//    P2OUT|=BIT4;                             // Pull-up resistor on P1.1
+//    P2REN|= BIT4;
+//    P2IES|=BIT4; // hi\lo
+//    P2IFG = 0;
+//    P2IE |= BIT4;
+////    P2DIR&=~BIT5; // DOWM
+////    P2OUT|=BIT5;                             // Pull-up resistor on P1.1
+////    P2REN|= BIT5;
+////    P2IES|=BIT5; // hi\lo
+////    P2IFG = 0;
+////    P2IE |= BIT5;
+      _EINT();
+
+}
+
+void TimerA0_Init()
+{
+    TA0CCTL0 = CCIE;                          // TACCR0 interrupt enabled
+    TA0CCR0=0;
+    TA0CTL = TASSEL__SMCLK | MC__CONTINOUS;   // SMCLK, continuous mode
 }
 /*
  * 串口初始化
@@ -136,6 +180,7 @@ void printf(unsigned char str[],unsigned char ent)
     }
 
 }
+
 
 
 
