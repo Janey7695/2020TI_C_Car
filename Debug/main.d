@@ -10,6 +10,7 @@ main.obj: D:/CCS_WorkSpace/motor_control/MotorCTL.h
 main.obj: D:/CCS_WorkSpace/motor_control/config.h
 main.obj: D:/CCS_WorkSpace/motor_control/sys.h
 main.obj: D:/CCS_WorkSpace/motor_control/oled.h
+main.obj: D:/CCS_WorkSpace/motor_control/PID.h
 
 ../main.c: 
 D:/ccs/ccs/ccs_base/msp430/include/msp430.h: 
@@ -21,3 +22,4 @@ D:/CCS_WorkSpace/motor_control/MotorCTL.h:
 D:/CCS_WorkSpace/motor_control/config.h: 
 D:/CCS_WorkSpace/motor_control/sys.h: 
 D:/CCS_WorkSpace/motor_control/oled.h: 
+D:/CCS_WorkSpace/motor_control/PID.h: 

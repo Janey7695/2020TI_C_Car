@@ -10,7 +10,7 @@
 
 #include <config.h>
 
-void Go_ahead();
-void Turn(unsigned char lefP,unsigned char rightP,unsigned int Ms);
+void Go_ahead(unsigned char Duty);
+void Turn(unsigned char lefP,unsigned char rightP,unsigned char Duty,unsigned int Ms);
 void Stop();
 #endif /* MOTORCTL_H_ */

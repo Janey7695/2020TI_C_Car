@@ -11,6 +11,7 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./MotorCTL.obj" \
+"./PID.obj" \
 "./main.obj" \
 "./oled.obj" \
 "./sys.obj" \
@@ -159,8 +160,8 @@ motor_control.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "MotorCTL.obj" "main.obj" "oled.obj" "sys.obj" 
-	-$(RM) "MotorCTL.d" "main.d" "oled.d" "sys.d" 
+	-$(RM) "MotorCTL.obj" "PID.obj" "main.obj" "oled.obj" "sys.obj" 
+	-$(RM) "MotorCTL.d" "PID.d" "main.d" "oled.d" "sys.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

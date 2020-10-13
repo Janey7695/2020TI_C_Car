@@ -2,6 +2,7 @@
 #include <MotorCTL.h>
 #include <sys.h>
 #include <oled.h>
+#include <PID.h>
 /**
  * main.c
  */
@@ -9,30 +10,125 @@
 int8 rightflag=0;
 int8 Bigrightflag=0;
 int8 teth=0;
-int16 tethtimelen;
+int8 teth1;
 int8 num[6];
+int8 num2[3];
+int8 cesuFlag=0;
+int8 Duty=17;
+int8 ChoiceTime=10;
+void AdjustV()
+{
 
-//void ChangeNum2Char(int16 Num)
-//{
-//
-//    num[0]=Num/10000+'0';
-//    num[1]=Num%10000/1000+'0';
-//    num[2]=Num%10000%1000/100+'0';
-//    num[3]=Num%10000%1000%100/10+'0';
-//    num[4]=Num%10000%1000%100%10+'0';
-//}
+    if(teth1<Vset)
+    {
+        Duty+=Pway(Vset,teth1);
+        if(Duty>50)
+            Duty=49;
+    }
+    if(teth1>Vset)
+    {
+        Duty-=Pway(Vset,teth1);
+        if(Duty==0)
+            Duty=0;
+    }
+}
+
+void Cn2C()
+{
+    num[0]='-';
+    num[1]='>';
+    num[2]='r';
+    num[3]='=';
+    num[4]=teth1+48;
+    num2[0]=Duty/10+48;
+    num2[1]=Duty%10+48;
+}
+
 int main(void)
 {
+    int8 Okk=0;
     Gpio_Init();//I/O口初始化
     Clock_Init();//时钟初始化
     Uart_Init();//串口通信初始化
-    OLED_Init();
-    //TimerA0_Init();
-    //printf("Initialization Finish!",1);
+    OLED_Init();//OLED初始化
     OLED_Clear();
-    OLED_ShowStr(0,0,"Init Finish",16);
-    OLED_ShowChar(0,6,teth+'0',16);
-    Go_ahead();//前行
+    while(!Okk)
+    {
+        OLED_ShowStr(0,2,"Time:",16);
+        OLED_ShowChar(40,2,ChoiceTime/10+48,16);
+        OLED_ShowChar(48,2,ChoiceTime%10+48,16);
+        if(!(P4IN&BIT7))
+        {
+            Delay_ms(50);
+            if(!(P4IN&BIT7))
+            {
+                Okk=1;
+            }
+        }
+        if(!(P2IN&BIT4))
+        {
+            Delay_ms(50);
+            if(!(P2IN&BIT4))
+            {
+                ChoiceTime+=1;
+                if(ChoiceTime>20)
+                    ChoiceTime=20;
+            }
+        }
+        if(!(P2IN&BIT5))
+        {
+            Delay_ms(50);
+            if(!(P2IN&BIT5))
+            {
+                ChoiceTime-=1;
+                if(ChoiceTime<10)
+                    ChoiceTime=10;
+            }
+        }
+        OLED_ShowStr(0,0,"Hit OK to Con",16);
+    }
+
+    //计数器TimerA0初始化
+    switch(ChoiceTime)
+    {
+    case 10:
+        TimerA0_Init(VsetTime10);
+        break;
+    case 11:
+            TimerA0_Init(VsetTime11);
+            break;
+    case 12:
+            TimerA0_Init(VsetTime12);
+            break;
+    case 13:
+            TimerA0_Init(VsetTime13);
+            break;
+    case 14:
+            TimerA0_Init(VsetTime14);
+            break;
+    case 15:
+            TimerA0_Init(VsetTime15);
+            break;
+    case 16:
+            TimerA0_Init(VsetTime16);
+            break;
+    case 17:
+            TimerA0_Init(VsetTime17);
+            break;
+    case 18:
+            TimerA0_Init(VsetTime18);
+            break;
+    case 19:
+            TimerA0_Init(VsetTime19);
+            break;
+    case 20:
+            TimerA0_Init(VsetTime20);
+            break;
+    }
+    OLED_Clear();
+//    OLED_ShowStr(0,2,"Init Finish",16);
+//    OLED_Clear();
+    Go_ahead(Duty);//前行
     while(1)
     {
         while((!(P8IN&BIT4))&&(!(P8IN&BIT5)))
@@ -43,19 +139,15 @@ int main(void)
         while(rightflag)
         {
             OLED_ShowStr(0,2,"Turn Brigh!",16);
-            // printf("turn right!",1);
-            //Turn(15,35,200);
             P3OUT|=BIT6;
-            Turn(44,30,167);
+            Turn(Duty+18,30,Duty,210);
             rightflag--;
         }
         while(Bigrightflag)
         {
             OLED_ShowStr(0,2,"Turn BBigh!",16);
-            // printf("turn right!",1);
-            //Turn(20,40,200);
             P3OUT|=BIT6;
-            Turn(40,30,300);
+            Turn(Duty+25,30,Duty,350);
             Bigrightflag--;
 
         }
@@ -69,8 +161,7 @@ int main(void)
             else
             {
                 OLED_ShowStr(0,2,"Turn right!",16);
-                // printf("turn right!",1);
-                Turn(30,3,50);
+                Turn(40,3,Duty,50);
             }
         }
         while(!(P8IN&BIT5))//左红外检测到嘿块 小车左转100ms
@@ -83,29 +174,40 @@ int main(void)
             else
             {
                 OLED_ShowStr(0,2,"Turn left! ",16);
-                //  printf("turn left!",1);
-                Turn(3,30,50);
+                Turn(3,40,Duty,50);
             }
         }
         OLED_ShowStr(0,2,"Go  ahead! ",16);
         //printf("go straight!",1);
         P1OUT|=BIT0;//led 亮
+        if(cesuFlag==1)
+        {
+            OLED_ShowStr(0,2,"Adjust !   ",16);
+            teth1=teth;
+            AdjustV();
+            Go_ahead(Duty);//前行
+            Cn2C();
+            OLED_ShowStr(0,0,"Duty:",16);
+            OLED_ShowStr(40,0,num2,16);
+            OLED_ShowStr(0,6,num,16);
+            teth=0;
+            cesuFlag=0;
+        }
 
     }
 
 }
-//#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-//#pragma vector = TIMER0_A0_VECTOR
-//__interrupt void Timer0_A0_ISR (void)
-//#elif defined(__GNUC__)
-//void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_ISR (void)
-//#else
-//#error Compiler not supported!
-//#endif
-//{
-//  P1OUT ^= BIT0;
-////  TA0CCR0 += 50000;                         // Add Offset to TA0CCR0
-//}
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void Timer0_A0_ISR (void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_ISR (void)
+#else
+#error Compiler not supported!
+#endif
+{
+    cesuFlag=1;
+}
 
 #pragma vector=USCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void)
@@ -158,57 +260,5 @@ __interrupt void PORT1_ISR(void)
             }
     }
 }
-//
-//#pragma vector = PORT2_VECTOR
-//__interrupt void PORT2_ISR(void)
-//{
-//    switch(__even_in_range(P2IV, P2IV_P2IFG7))
-//    {
-//        case P2IV_NONE : break;
-//        case P2IV_P2IFG0 : break;
-//        case P2IV_P2IFG1 : break;
-//        case P2IV_P2IFG2 : break;
-//
-//        //UP
-//        case P2IV_P2IFG3 :
-//        {
-//            if(!CHO)
-//            {
-//                MODE+=1;
-//                if(MODE==3)
-//                    MODE=1;
-//            }
-//            P2IFG &= ~BIT3;
-//            break;
-//        }
-//
-//        //DOWN
-//        case P2IV_P2IFG4 :
-//        {
-//            if(CHO!=0)
-//            {
-//                MODE-=1;
-//                if(MODE==0)
-//                    MODE=2;
-//
-//            }
-//            P2IFG &= ~BIT4;
-//            break;
-//        }
-//
-//        // OK
-//        case P2IV_P2IFG5 :
-//        {
-//            if(CHO!=0)
-//            {
-//                OK=1;
-//                CHO=1;
-//            }
-//            P1OUT|=BIT0;
-//            P2IFG &= ~BIT5;
-//            break;
-//        }
-//        case P2IV_P2IFG6 : break;
-//        case P2IV_P2IFG7 : break;
-//    }
-//}
+
+

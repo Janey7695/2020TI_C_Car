@@ -81,7 +81,7 @@ void Gpio_Init()
     P3SEL0 &=~BIT3;                    // P3.3 options select
     P3SEL1 |= BIT3;                    // P3.3 options select
     P3DIR |=BIT0|BIT6;
-    PJSEL0 |= BIT4 | BIT5; //TODO:这啥？？？？
+    PJSEL0 |= BIT4 | BIT5; // 外接晶振
     P3OUT&=~BIT0;
     P3OUT&=~BIT6;
 
@@ -107,33 +107,33 @@ void Gpio_Init()
     P1IFG = 0;                                // Clear all P1 interrupt flags
     P1IE |= BIT5;                              // P1.1 interrupt enabled
 
-//    P2DIR&=~BIT3; // OK
-//    P2OUT|=BIT3;                             // Pull-up resistor on P1.1
-//    P2REN|= BIT3;                             // Select pull-up mode for P1.1
+    P2DIR&=~BIT5; // OK
+    P2OUT|=BIT5;                             // Pull-up resistor on P1.1
+    P2REN|= BIT5;                             // Select pull-up mode for P1.1
 //    P2IES|=BIT3; // hi\lo
 //    P2IFG = 0;
 //    P2IE |= BIT3;
-//    P2DIR&=~BIT4; // UP
-//    P2OUT|=BIT4;                             // Pull-up resistor on P1.1
-//    P2REN|= BIT4;
+    P2DIR&=~BIT4; // UP
+    P2OUT|=BIT4;                             // Pull-up resistor on P1.1
+    P2REN|= BIT4;
 //    P2IES|=BIT4; // hi\lo
 //    P2IFG = 0;
 //    P2IE |= BIT4;
-////    P2DIR&=~BIT5; // DOWM
-////    P2OUT|=BIT5;                             // Pull-up resistor on P1.1
-////    P2REN|= BIT5;
-////    P2IES|=BIT5; // hi\lo
-////    P2IFG = 0;
-////    P2IE |= BIT5;
+    P4DIR&=~BIT7; // DOWM
+    P4OUT|=BIT7;                             // Pull-up resistor on P1.1
+    P4REN|= BIT7;
+//    P2IES|=BIT5; // hi\lo
+//    P2IFG = 0;
+//    P2IE |= BIT5;
       _EINT();
 
 }
 
-void TimerA0_Init()
+void TimerA0_Init(int16 VsetTime)
 {
     TA0CCTL0 = CCIE;                          // TACCR0 interrupt enabled
-    TA0CCR0=0;
-    TA0CTL = TASSEL__SMCLK | MC__CONTINOUS;   // SMCLK, continuous mode
+    TA0CCR0=VsetTime;
+    TA0CTL = TASSEL__ACLK | MC__UP;   // SMCLK, continuous mode
 }
 /*
  * 串口初始化

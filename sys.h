@@ -9,7 +9,7 @@
 #define SYS_H_
 
 #include <msp430.h>
-
+#include <config.h>
 void Delay_us(int us);
 void Delay_ms(int ms);
 void Clock_Init();
