@@ -28,9 +28,9 @@ void Go_ahead()
     P3OUT&=~BIT6;
     TA1CCR0 = 50-1;                          // PWM Period
     TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
-    TA1CCR1 = 15;                             // CCR1 PWM duty cycle
+    TA1CCR1 = 30;                             // CCR1 PWM duty cycle
     TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
-    TA1CCR2 = 15;                             // CCR2 PWM duty cycle
+    TA1CCR2 = 30;                             // CCR2 PWM duty cycle
     TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR
 }
 

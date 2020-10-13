@@ -46,7 +46,7 @@ int main(void)
             // printf("turn right!",1);
             //Turn(15,35,200);
             P3OUT|=BIT6;
-            Turn(22,35,50);
+            Turn(44,30,167);
             rightflag--;
         }
         while(Bigrightflag)
@@ -55,7 +55,7 @@ int main(void)
             // printf("turn right!",1);
             //Turn(20,40,200);
             P3OUT|=BIT6;
-            Turn(30,35,50);
+            Turn(40,30,300);
             Bigrightflag--;
 
         }
@@ -70,7 +70,7 @@ int main(void)
             {
                 OLED_ShowStr(0,2,"Turn right!",16);
                 // printf("turn right!",1);
-                Turn(20,3,50);
+                Turn(30,3,50);
             }
         }
         while(!(P8IN&BIT5))//左红外检测到嘿块 小车左转100ms
@@ -84,7 +84,7 @@ int main(void)
             {
                 OLED_ShowStr(0,2,"Turn left! ",16);
                 //  printf("turn left!",1);
-                Turn(3,20,50);
+                Turn(3,30,50);
             }
         }
         OLED_ShowStr(0,2,"Go  ahead! ",16);
@@ -138,8 +138,8 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG3 : break;
         case P1IV_P1IFG4 :
         {
-            rightflag+=4;
-            P1IFG &= ~BIT1;                           // Clear P1.1 IFG
+            Bigrightflag+=1;
+            P1IFG &= ~BIT7;
             break;
         }
 
@@ -152,8 +152,8 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG6 : break;
         case P1IV_P1IFG7 :
             {
-                Bigrightflag+=4;
-                P1IFG &= ~BIT7;
+                rightflag+=1;
+                P1IFG &= ~BIT1;                           // Clear P1.1 IFG
                 break;
             }
     }
