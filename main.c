@@ -27,13 +27,13 @@ void AdjustV()
 
     if(teth1<Vset)
     {
-        Duty+=Pway(Vset,teth1);
+        Duty+=4*PID(Vset,teth1,0.5);
         if(Duty>50)
             Duty=49;
     }
     if(teth1>Vset)
     {
-        Duty-=Pway(Vset,teth1);
+        Duty-=PID(Vset,teth1,0.5);
         if(Duty==0)
             Duty=0;
     }
@@ -298,7 +298,7 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG4 :
         {
             Bigrightflag+=1;
-            P1IFG &= ~BIT7;
+            P1IFG &= ~BIT4;
             break;
         }
 
@@ -312,7 +312,7 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG7 :
             {
                 rightflag+=1;
-                P1IFG &= ~BIT1;                           // Clear P1.1 IFG
+                P1IFG &= ~BIT7;                           // Clear P1.1 IFG
                 break;
             }
     }

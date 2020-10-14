@@ -7,18 +7,18 @@
 
 #include <PID.h>
 #include <config.h>
-int Pway(int8 Targ,int8 Real)
+int PID(int8 Targ,int8 Real,float Kp)
 {
-    int8 delta;
+    int8 erro;
     if(Targ>Real)
     {
-        delta=Targ-Real;
-        return delta/2+1;
+        erro=Targ-Real;
+        return Kp*erro;
     }
     if(Targ<Real)
     {
-        delta=Real-Targ;
-        return delta/2+1;
+        erro=Real-Targ;
+        return Kp*erro;
     }
     return 0;
 
