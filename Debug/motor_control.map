@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v20.2.2                     
 ******************************************************************************
->> Linked Tue Oct 13 20:16:15 2020
+>> Linked Tue Oct 13 22:47:52 2020
 
 OUTPUT FILE NAME:   <motor_control.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs_mpu"  address: 00004438
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000b1  0000074f  RWIX
-  FRAM                  00004400   0000bb80  00000954  0000b22c  RWIX
+  RAM                   00001c00   00000800  000000b2  0000074e  RWIX
+  FRAM                  00004400   0000bb80  0000098e  0000b1f2  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00013ff8  00000b62  00013496  RWIX
+  FRAM2                 00010000   00013ff8  00000c46  000133b2  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -108,12 +108,11 @@ section   page    origin      length       input sections
 .ipe_vars 
 *          0    00004400    00000000     UNINITIALIZED
 
-.cinit     0    00004d28    0000002c     
-                  00004d28    0000000c     (__TI_handler_table)
-                  00004d34    00000009     (.cinit..data.load) [load image, compression = lzss]
-                  00004d3d    00000001     --HOLE-- [fill = 0]
-                  00004d3e    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00004d44    00000010     (__TI_cinit_table)
+.cinit     0    00004d62    0000002c     
+                  00004d62    0000000c     (__TI_handler_table)
+                  00004d6e    0000000a     (.cinit..data.load) [load image, compression = lzss]
+                  00004d78    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004d7e    00000010     (__TI_cinit_table)
 
 .binit     0    00004400    00000000     
 
@@ -133,8 +132,8 @@ section   page    origin      length       input sections
                   00001c06    00000004     (.common:num2)
                   00001c0a    00000001     (.common:teth1)
 
-.data      0    00001c0b    00000006     UNINITIALIZED
-                  00001c0b    00000006     main.obj (.data)
+.data      0    00001c0b    00000007     UNINITIALIZED
+                  00001c0b    00000007     main.obj (.data)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.c.obj (.stack)
@@ -246,42 +245,42 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.const     0    00004470    000008b8     
+.const     0    00004470    000008f2     
                   00004470    00000610     oled.obj (.const:.string:CHAR16x8)
                   00004a80    0000022e     oled.obj (.const:CHAR8x6)
-                  00004cae    0000007a     main.obj (.const:.string)
+                  00004cae    000000b4     main.obj (.const:.string)
 
-.text      0    00010000    00000b62     
-                  00010000    00000376     main.obj (.text:main)
-                  00010376    0000010a     oled.obj (.text:OLED_Init)
-                  00010480    000000e4     oled.obj (.text:OLED_ShowChar)
-                  00010564    000000e2     sys.obj (.text:Gpio_Init)
-                  00010646    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  000106bc    0000006e     oled.obj (.text:OLED_ShowStr)
-                  0001072a    0000006e     oled.obj (.text:OLED_WR_Byte)
-                  00010798    00000056     oled.obj (.text:OLED_Clear)
-                  000107ee    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  00010842    0000004e     main.obj (.text:Cn2C)
-                  00010890    0000004a     PID.obj (.text:Pway)
-                  000108da    00000044     main.obj (.text:AdjustV)
-                  0001091e    00000044     MotorCTL.obj (.text:Stop)
-                  00010962    0000003a     MotorCTL.obj (.text:Turn)
-                  0001099c    00000034     oled.obj (.text:OLED_Set_Pos)
-                  000109d0    0000002e     sys.obj (.text:Clock_Init)
-                  000109fe    0000002c     MotorCTL.obj (.text:Go_ahead)
-                  00010a2a    0000002c     MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib : mpu_init.o (.text:__mpu_init)
-                  00010a56    0000002c     rts430x_lc_rd_eabi.lib : div16s.asm.obj (.text)
-                  00010a82    0000002a     sys.obj (.text:Uart_Init)
-                  00010aac    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  00010ad0    0000001a     sys.obj (.text:TimerA0_Init)
-                  00010aea    00000018     sys.obj (.text:Delay_ms)
-                  00010b02    00000018     rts430x_lc_rd_eabi.lib : mult16_f5hw.asm.obj (.text)
-                  00010b1a    00000016                            : div16u.asm.obj (.text)
-                  00010b30    00000014                            : memcpy.c.obj (.text:memcpy)
-                  00010b44    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00010b56    00000006                            : exit.c.obj (.text:abort)
-                  00010b5c    00000004                            : pre_init.c.obj (.text:_system_pre_init)
-                  00010b60    00000002                            : startup.c.obj (.text:_system_post_cinit)
+.text      0    00010000    00000c46     
+                  00010000    0000044e     main.obj (.text:main)
+                  0001044e    0000010a     oled.obj (.text:OLED_Init)
+                  00010558    000000e4     oled.obj (.text:OLED_ShowChar)
+                  0001063c    000000de     sys.obj (.text:Gpio_Init)
+                  0001071a    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00010790    0000006e     oled.obj (.text:OLED_ShowStr)
+                  000107fe    0000006e     oled.obj (.text:OLED_WR_Byte)
+                  0001086c    00000056     oled.obj (.text:OLED_Clear)
+                  000108c2    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  00010916    0000004e     main.obj (.text:Cn2C)
+                  00010964    0000004a     main.obj (.text:AdjustV)
+                  000109ae    0000004a     PID.obj (.text:Pway)
+                  000109f8    00000044     MotorCTL.obj (.text:Stop)
+                  00010a3c    00000044     MotorCTL.obj (.text:Turn)
+                  00010a80    00000034     oled.obj (.text:OLED_Set_Pos)
+                  00010ab4    0000002e     sys.obj (.text:Clock_Init)
+                  00010ae2    0000002c     MotorCTL.obj (.text:Go_ahead)
+                  00010b0e    0000002c     MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib : mpu_init.o (.text:__mpu_init)
+                  00010b3a    0000002c     rts430x_lc_rd_eabi.lib : div16s.asm.obj (.text)
+                  00010b66    0000002a     sys.obj (.text:Uart_Init)
+                  00010b90    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  00010bb4    0000001a     sys.obj (.text:TimerA0_Init)
+                  00010bce    00000018     sys.obj (.text:Delay_ms)
+                  00010be6    00000018     rts430x_lc_rd_eabi.lib : mult16_f5hw.asm.obj (.text)
+                  00010bfe    00000016                            : div16u.asm.obj (.text)
+                  00010c14    00000014                            : memcpy.c.obj (.text:memcpy)
+                  00010c28    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00010c3a    00000006                            : exit.c.obj (.text:abort)
+                  00010c40    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+                  00010c44    00000002                            : startup.c.obj (.text:_system_post_cinit)
 
 MODULE SUMMARY
 
@@ -289,12 +288,12 @@ MODULE SUMMARY
        ------                       ----   -------   -------
     .\
        oled.obj                     852    2110      0      
-       main.obj                     1104   128       17     
-       sys.obj                      364    0         0      
-       MotorCTL.obj                 170    0         0      
+       main.obj                     1326   186       18     
+       sys.obj                      360    0         0      
+       MotorCTL.obj                 180    0         0      
        PID.obj                      74     0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       2564   2238      17     
+       Total:                       2792   2296      18     
                                                             
     D:\ccs\ccs\ccs_base\msp430\lib\FR59xx\MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib
        mpu_init.o                   44     0         0      
@@ -344,21 +343,21 @@ MODULE SUMMARY
        Total:                       418    52        0      
                                                             
        Stack:                       0      0         160    
-       Linker Generated:            0      43        0      
+       Linker Generated:            0      44        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 3026   2333      177    
+       Grand Total:                 3254   2392      178    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00004d44 records: 2, size/record: 8, table size: 16
-	.data: load addr=00004d34, load size=00000009 bytes, run addr=00001c0b, run size=00000006 bytes, compression=lzss
-	.bss: load addr=00004d3e, load size=00000006 bytes, run addr=00001c00, run size=0000000b bytes, compression=zero_init
+__TI_cinit_table @ 00004d7e records: 2, size/record: 8, table size: 16
+	.data: load addr=00004d6e, load size=0000000a bytes, run addr=00001c0b, run size=00000007 bytes, compression=lzss
+	.bss: load addr=00004d78, load size=00000006 bytes, run addr=00001c00, run size=0000000b bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004d28 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004d62 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -623,11 +622,11 @@ address   name
 000009ce  AESAXIN                                
 000009cf  AESAXIN_H                              
 000009ce  AESAXIN_L                              
-000108da  AdjustV                                
+00010964  AdjustV                                
 000004be  BCD2BIN                                
 000004bc  BIN2BCD                                
 00001c0c  Bigrightflag                           
-00010b56  C$$EXIT                                
+00010c3a  C$$EXIT                                
 0000043e  CAPTIO0CTL                             
 0000043f  CAPTIO0CTL_H                           
 0000043e  CAPTIO0CTL_L                           
@@ -733,8 +732,8 @@ address   name
 0000016d  CSCTL6_H                               
 0000016c  CSCTL6_L                               
 00001c10  ChoiceTime                             
-000109d0  Clock_Init                             
-00010842  Cn2C                                   
+00010ab4  Clock_Init                             
+00010916  Cn2C                                   
 00000510  DMA0CTL                                
 00000516  DMA0DA                                 
 00000518  DMA0DAH                                
@@ -765,7 +764,7 @@ address   name
 00000506  DMACTL3                                
 00000508  DMACTL4                                
 0000050e  DMAIV                                  
-00010aea  Delay_ms                               
+00010bce  Delay_ms                               
 00001c0f  Duty                                   
 00000d20  ESIAFE                                 
 00000d21  ESIAFE_H                               
@@ -1108,8 +1107,8 @@ address   name
 00000146  GCCTL1                                 
 00000147  GCCTL1_H                               
 00000146  GCCTL1_L                               
-000109fe  Go_ahead                               
-00010564  Gpio_Init                              
+00010ae2  Go_ahead                               
+0001063c  Gpio_Init                              
 00000a40  LCDBM1                                 
 00000a49  LCDBM10                                
 00000a4a  LCDBM11                                
@@ -1266,12 +1265,12 @@ address   name
 000004c2  MPYS_L                                 
 000004c1  MPY_H                                  
 000004c0  MPY_L                                  
-00010798  OLED_Clear                             
-00010376  OLED_Init                              
-0001099c  OLED_Set_Pos                           
-00010480  OLED_ShowChar                          
-000106bc  OLED_ShowStr                           
-0001072a  OLED_WR_Byte                           
+0001086c  OLED_Clear                             
+0001044e  OLED_Init                              
+00010a80  OLED_Set_Pos                           
+00010558  OLED_ShowChar                          
+00010790  OLED_ShowStr                           
+000107fe  OLED_WR_Byte                           
 000004c8  OP2                                    
 000004e2  OP2H                                   
 000004e3  OP2H_H                                 
@@ -1439,7 +1438,7 @@ address   name
 0000012b  PMMIFG_H                               
 0000012a  PMMIFG_L                               
 00004400  PORT1_ISR                              
-00010890  Pway                                   
+000109ae  Pway                                   
 00000158  RCCTL0                                 
 00000159  RCCTL0_H                               
 00000158  RCCTL0_L                               
@@ -1543,7 +1542,7 @@ address   name
 0000019a  SYSUNIV                                
 0000019b  SYSUNIV_H                              
 0000019a  SYSUNIV_L                              
-0001091e  Stop                                   
+000109f8  Stop                                   
 00000352  TA0CCR0                                
 00000354  TA0CCR1                                
 00000356  TA0CCR2                                
@@ -1605,8 +1604,8 @@ address   name
 000003ee  TB0IV                                  
 000003d0  TB0R                                   
 0000446a  Timer0_A0_ISR                          
-00010ad0  TimerA0_Init                           
-00010962  Turn                                   
+00010bb4  TimerA0_Init                           
+00010a3c  Turn                                   
 000005d0  UCA0ABCTL                              
 000005c6  UCA0BRW                                
 000005c7  UCA0BRW_H                              
@@ -1766,20 +1765,21 @@ address   name
 0000068f  UCB1TXBUF_H                            
 0000068e  UCB1TXBUF_L                            
 00004458  USCI_A0_ISR                            
-00010a82  Uart_Init                              
+00010b66  Uart_Init                              
+00001c11  Vset                                   
 0000015c  WDTCTL                                 
 0000015d  WDTCTL_H                               
 0000015c  WDTCTL_L                               
 00002400  __STACK_END                            
 000000a0  __STACK_SIZE                           
-00004d44  __TI_CINIT_Base                        
-00004d54  __TI_CINIT_Limit                       
-00004d28  __TI_Handler_Table_Base                
-00004d34  __TI_Handler_Table_Limit               
+00004d7e  __TI_CINIT_Base                        
+00004d8e  __TI_CINIT_Limit                       
+00004d62  __TI_Handler_Table_Base                
+00004d6e  __TI_Handler_Table_Limit               
 00004462  __TI_ISR_TRAP                          
-000107ee  __TI_auto_init_nobinit_nopinit_hold_wdt
-00010646  __TI_decompress_lzss                   
-00010b44  __TI_decompress_none                   
+000108c2  __TI_auto_init_nobinit_nopinit_hold_wdt
+0001071a  __TI_decompress_lzss                   
+00010c28  __TI_decompress_none                   
 0000ffc6  __TI_int27                             
 0000ffc8  __TI_int28                             
 0000ffca  __TI_int29                             
@@ -1811,28 +1811,28 @@ address   name
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
-00010aac  __TI_zero_init_nomemset                
+00010b90  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
 00000001  __mpu_enable                           
-00010a2a  __mpu_init                             
-00010a56  __mspabi_divi                          
-00010b1a  __mspabi_divu                          
-00010b02  __mspabi_mpyi_f5hw                     
-00010a56  __mspabi_remi                          
-00010b1a  __mspabi_remu                          
+00010b0e  __mpu_init                             
+00010b3a  __mspabi_divi                          
+00010bfe  __mspabi_divu                          
+00010be6  __mspabi_mpyi_f5hw                     
+00010b3a  __mspabi_remi                          
+00010bfe  __mspabi_remu                          
 00004438  _c_int00_noargs_mpu                    
 0000fffe  _reset_vector                          
 00002360  _stack                                 
-00010b60  _system_post_cinit                     
-00010b5c  _system_pre_init                       
-00010b56  abort                                  
+00010c44  _system_post_cinit                     
+00010c40  _system_pre_init                       
+00010c3a  abort                                  
 00001c0e  cesuFlag                               
 00004400  fram_ipe_end                           
 00004400  fram_ipe_start                         
 00004400  fram_rw_start                          
 00004400  fram_rx_start                          
 00010000  main                                   
-00010b30  memcpy                                 
+00010c14  memcpy                                 
 0000a501  mpu_ctl0_value                         
 00001513  mpu_sam_value                          
 00000440  mpu_segment_border1                    
@@ -3238,6 +3238,7 @@ address   name
 00001c0e  cesuFlag                               
 00001c0f  Duty                                   
 00001c10  ChoiceTime                             
+00001c11  Vset                                   
 00002360  _stack                                 
 00002400  __STACK_END                            
 00004400  PORT1_ISR                              
@@ -3251,10 +3252,10 @@ address   name
 0000446a  Timer0_A0_ISR                          
 00004470  CHAR16x8                               
 00004a80  CHAR8x6                                
-00004d28  __TI_Handler_Table_Base                
-00004d34  __TI_Handler_Table_Limit               
-00004d44  __TI_CINIT_Base                        
-00004d54  __TI_CINIT_Limit                       
+00004d62  __TI_Handler_Table_Base                
+00004d6e  __TI_Handler_Table_Limit               
+00004d7e  __TI_CINIT_Base                        
+00004d8e  __TI_CINIT_Limit                       
 0000a501  mpu_ctl0_value                         
 0000ffc6  __TI_int27                             
 0000ffc8  __TI_int28                             
@@ -3286,41 +3287,41 @@ address   name
 0000fffc  __TI_int54                             
 0000fffe  _reset_vector                          
 00010000  main                                   
-00010376  OLED_Init                              
-00010480  OLED_ShowChar                          
-00010564  Gpio_Init                              
-00010646  __TI_decompress_lzss                   
-000106bc  OLED_ShowStr                           
-0001072a  OLED_WR_Byte                           
-00010798  OLED_Clear                             
-000107ee  __TI_auto_init_nobinit_nopinit_hold_wdt
-00010842  Cn2C                                   
-00010890  Pway                                   
-000108da  AdjustV                                
-0001091e  Stop                                   
-00010962  Turn                                   
-0001099c  OLED_Set_Pos                           
-000109d0  Clock_Init                             
-000109fe  Go_ahead                               
-00010a2a  __mpu_init                             
-00010a56  __mspabi_divi                          
-00010a56  __mspabi_remi                          
-00010a82  Uart_Init                              
-00010aac  __TI_zero_init_nomemset                
-00010ad0  TimerA0_Init                           
-00010aea  Delay_ms                               
-00010b02  __mspabi_mpyi_f5hw                     
-00010b1a  __mspabi_divu                          
-00010b1a  __mspabi_remu                          
-00010b30  memcpy                                 
-00010b44  __TI_decompress_none                   
-00010b56  C$$EXIT                                
-00010b56  abort                                  
-00010b5c  _system_pre_init                       
-00010b60  _system_post_cinit                     
+0001044e  OLED_Init                              
+00010558  OLED_ShowChar                          
+0001063c  Gpio_Init                              
+0001071a  __TI_decompress_lzss                   
+00010790  OLED_ShowStr                           
+000107fe  OLED_WR_Byte                           
+0001086c  OLED_Clear                             
+000108c2  __TI_auto_init_nobinit_nopinit_hold_wdt
+00010916  Cn2C                                   
+00010964  AdjustV                                
+000109ae  Pway                                   
+000109f8  Stop                                   
+00010a3c  Turn                                   
+00010a80  OLED_Set_Pos                           
+00010ab4  Clock_Init                             
+00010ae2  Go_ahead                               
+00010b0e  __mpu_init                             
+00010b3a  __mspabi_divi                          
+00010b3a  __mspabi_remi                          
+00010b66  Uart_Init                              
+00010b90  __TI_zero_init_nomemset                
+00010bb4  TimerA0_Init                           
+00010bce  Delay_ms                               
+00010be6  __mspabi_mpyi_f5hw                     
+00010bfe  __mspabi_divu                          
+00010bfe  __mspabi_remu                          
+00010c14  memcpy                                 
+00010c28  __TI_decompress_none                   
+00010c3a  C$$EXIT                                
+00010c3a  abort                                  
+00010c40  _system_pre_init                       
+00010c44  _system_post_cinit                     
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 ffffffff  __c_args__                             
 
-[1474 symbols]
+[1475 symbols]

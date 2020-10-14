@@ -10,7 +10,8 @@
 
 #define int8 volatile unsigned char
 #define int16 volatile unsigned int
-#define Vset 2
+
+#define VsetTimeFast 32768
 #define VsetTime10 26870
 #define VsetTime11 29557
 #define VsetTime12 32244

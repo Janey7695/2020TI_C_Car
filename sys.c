@@ -82,8 +82,8 @@ void Gpio_Init()
     P3SEL1 |= BIT3;                    // P3.3 options select
     P3DIR |=BIT0|BIT6;
     PJSEL0 |= BIT4 | BIT5; // 外接晶振
-    P3OUT&=~BIT0;
-    P3OUT&=~BIT6;
+//    P3OUT&=~BIT0;
+//    P3OUT&=~BIT6;
 
     PM5CTL0 &= ~LOCKLPM5; //退出LPM5模式
 
@@ -92,7 +92,10 @@ void Gpio_Init()
     P8DIR&=~BIT5; //红外灯接收左
     P8DIR|=BIT6+BIT7; //P8.6 ->D0 SCL P8.7 ->D1 SDIN
     P9DIR|=BIT0+BIT1+BIT5; //P9.0 -> rst P9.1 ->DC P9.5 ->CS
-    P2DIR|=BIT6; //蜂鸣器
+
+
+    P9DIR|=BIT4; //蜂鸣器
+    P9OUT&=~BIT4;
 
     P1DIR&=~BIT4;   //红外接收右二
     P1IES |= BIT4;                             // P1.1 Hi/Lo edge
