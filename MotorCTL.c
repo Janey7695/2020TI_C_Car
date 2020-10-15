@@ -19,17 +19,19 @@
 
 void Turn(unsigned char lefP,unsigned char rightP,unsigned char Duty,unsigned int Ms)
 {
-    if(Duty>50)
+    if(Duty>100)
     {
-        Duty=49;
+        Duty=99;
     }
-    TA1CCR0 = 50-1;                          // PWM Period
+    TA1CCR0 = 100-1;                          // PWM Period
     TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
     TA1CCR1 = rightP;                             // CCR1 PWM duty cycle
     TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
     TA1CCR2 = lefP;                             // CCR2 PWM duty cycle
     TA1CTL = TASSEL__ACLK | MC__UP | TACLR;   // ACLK, up mode, clear TAR   Delay_us(150);
     Delay_ms(Ms);
+    Go_ahead(90);
+    Delay_ms(5);
     Go_ahead(Duty);
 }
 /*
@@ -39,8 +41,12 @@ void Turn(unsigned char lefP,unsigned char rightP,unsigned char Duty,unsigned in
 
 void Go_ahead(unsigned char Duty)
 {
+    if(Duty>100)
+       {
+           Duty=99;
+       }
     P3OUT&=~BIT6;
-    TA1CCR0 = 50-1;                          // PWM Period
+    TA1CCR0 = 100-1;                          // PWM Period
     TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
     TA1CCR1 = Duty;                             // CCR1 PWM duty cycle
     TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set
@@ -53,7 +59,7 @@ void Stop()
 {
     //关闭总中断，防止计时器，计数器继续进行，浪费芯片资源
     _DINT();
-    TA1CCR0 = 50-1;                          // PWM Period
+    TA1CCR0 = 100-1;                          // PWM Period
     TA1CCTL1 = OUTMOD_7;                      // CCR1 reset/set
     TA1CCR1 = 0;                             // CCR1 PWM duty cycle
     TA1CCTL2 = OUTMOD_7;                      // CCR2 reset/set

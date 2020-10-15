@@ -80,7 +80,9 @@ void Gpio_Init()
     P3DIR |=  BIT3;                     //  P3.3 output 右
     P3SEL0 &=~BIT3;                    // P3.3 options select
     P3SEL1 |= BIT3;                    // P3.3 options select
-    P3DIR |=BIT0|BIT6;
+
+    P3DIR |=BIT0|BIT6;  //左与右
+
     PJSEL0 |= BIT4 | BIT5; // 外接晶振
 //    P3OUT&=~BIT0;
 //    P3OUT&=~BIT6;
@@ -110,25 +112,19 @@ void Gpio_Init()
     P1IFG = 0;                                // Clear all P1 interrupt flags
     P1IE |= BIT5;                              // P1.1 interrupt enabled
 
-    P2DIR&=~BIT5; // OK
+    P2DIR&=~BIT5; // UP
     P2OUT|=BIT5;                             // Pull-up resistor on P1.1
     P2REN|= BIT5;                             // Select pull-up mode for P1.1
-//    P2IES|=BIT3; // hi\lo
-//    P2IFG = 0;
-//    P2IE |= BIT3;
-    P2DIR&=~BIT4; // UP
+
+    P2DIR&=~BIT4; // DOWN
     P2OUT|=BIT4;                             // Pull-up resistor on P1.1
     P2REN|= BIT4;
-//    P2IES|=BIT4; // hi\lo
-//    P2IFG = 0;
-//    P2IE |= BIT4;
-    P4DIR&=~BIT7; // DOWM
+
+    P4DIR&=~BIT7; // OK
     P4OUT|=BIT7;                             // Pull-up resistor on P1.1
     P4REN|= BIT7;
-//    P2IES|=BIT5; // hi\lo
-//    P2IFG = 0;
-//    P2IE |= BIT5;
-      _EINT();
+
+      _EINT(); //中断总允许
 
 }
 

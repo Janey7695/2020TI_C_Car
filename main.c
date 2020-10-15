@@ -3,6 +3,7 @@
 #include <sys.h>
 #include <oled.h>
 #include <PID.h>
+#include <oledbmp.h>
 /**
  * main.c
  */
@@ -14,26 +15,28 @@ int8 teth1; //复制teth的值，防止teth在做下一步运算时被中断打断，导致cpu取值紊乱
 int8 num[6]; //用来存储当前时间间隔内转过的1/5圈的个数转换成的字符串
 int8 num2[3]; //用来存储当前的Duty占空比
 int8 cesuFlag=0; //调速标志
-int8 Duty=14; //占空比 起始值默认是14
+int8 Duty=30; //占空比 起始值默认是13
 int8 ChoiceTime=10; //选择驶过1m的时间（可能值10-21）
 int8 Vset=2;//根据计算得出的 只有在一定时间间隔内转过的1/5圈的个数等于Vset的值，小车此时的速度才接近预设值
+int8 flag1;
 
 /*
  * 调速函数
  *
  */
+
 void AdjustV()
 {
 
     if(teth1<Vset)
     {
-        Duty+=4*PID(Vset,teth1,0.5);
-        if(Duty>50)
-            Duty=49;
+        Duty+=2*PID(Vset,teth1,1);
+        if(Duty>90)
+            Duty=90;
     }
     if(teth1>Vset)
     {
-        Duty-=PID(Vset,teth1,0.5);
+        Duty-=2*PID(Vset,teth1,1);
         if(Duty==0)
             Duty=0;
     }
@@ -160,17 +163,20 @@ int main(void)
             break;
     case 21:
     {
-        Vset=10;
-        Duty=35;
+        Vset=12;
+        Duty=80;
         TimerA0_Init(VsetTimeFast);
         break;
     }
 
     }
     OLED_Clear();
-    Go_ahead(Duty);//前行
+    rightflag=0; //右红外2感应标志
+    Bigrightflag=0; //右红外3感应标志
     P1OUT|=BIT0;//led 亮
-
+    OLED_ShowStr(24,4,"Wait!...",16);
+    Delay_ms(500);
+    Go_ahead(Duty);//前行
     /*
      * 开始进入循迹循环
      */
@@ -190,18 +196,22 @@ int main(void)
         //如果右2红外触碰黑块，小右转标志（rightflag）被置1，开始小右转
         while(rightflag)
         {
+            rightflag=0;
+            //OLED_DrawBMP(0,0,128,7,RightBmp);
             OLED_ShowStr(0,2,"Turn Brigh!",16);
             P3OUT|=BIT6;
-            Turn(Duty+18,30,Duty,210);
-            rightflag--;
+            Turn(70,35,Duty,100);
+            flag1=1;
         }
         //如果右3红外触碰黑块，大右转标志（Bigrightflag）被置1，开始大右转
         while(Bigrightflag)
         {
+           // OLED_DrawBMP(0,0,128,7,RightBmp);
+            Bigrightflag=0;
             OLED_ShowStr(0,2,"Turn BBigh!",16);
             P3OUT|=BIT6;
-            Turn(Duty+25,30,Duty,350);
-            Bigrightflag--;
+            Turn(80,30,Duty,150);
+            flag1=1;
 
         }
         //如果右1红外检测到黑块，进行直线上的小型矫正旋转
@@ -215,8 +225,9 @@ int main(void)
             }
             else
             {
+               // OLED_DrawBMP(0,0,128,7,RightBmp);
                 OLED_ShowStr(0,2,"Turn right!",16);
-                Turn(40,3,Duty,50);
+                Turn(80,20,Duty,40);
             }
         }
         //如果左1红外检测到黑块，进行直线上的小型矫正旋转
@@ -230,25 +241,34 @@ int main(void)
             }
             else
             {
+                //OLED_DrawBMP(0,0,128,7,LeftBmp);
                 OLED_ShowStr(0,2,"Turn left! ",16);
-                Turn(3,40,Duty,50);
+                Turn(20,80,Duty,40);
             }
         }
         OLED_ShowStr(0,2,"Go  ahead! ",16);
-
+      //  OLED_DrawBMP(0,0,128,7,AheadBmp);
         //如果调速标志被中断置1，则会进入调速函数中
         if(cesuFlag==1)
         {
-            OLED_ShowStr(0,2,"Adjust !   ",16);
-            teth1=teth; //复制teth的值
-            AdjustV(); //调速
-            Go_ahead(Duty);//前行
-            Cn2C();
-            OLED_ShowStr(0,0,"Duty:",16);
-            OLED_ShowStr(40,0,num2,16);
-            OLED_ShowStr(0,6,num,16);
-            teth=0;
-            cesuFlag=0;//清除调速标志
+            if(flag1==1)
+            {
+                cesuFlag=0;//清除调速标志
+            }
+            else
+            {
+                OLED_ShowStr(16,2,"Ad",16);
+                teth1=teth; //复制teth的值
+                AdjustV(); //调速
+                Go_ahead(Duty);//前行
+                Cn2C();
+                OLED_ShowStr(0,0,"Duty:",16);
+                OLED_ShowStr(48,0,num2,16);
+                OLED_ShowStr(0,6,num,16);
+                teth=0;
+                cesuFlag=0;//清除调速标志
+            }
+
         }
 
     }
@@ -297,7 +317,7 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG3 : break;
         case P1IV_P1IFG4 :
         {
-            Bigrightflag+=1;
+            Bigrightflag=1;
             P1IFG &= ~BIT4;
             break;
         }
@@ -311,7 +331,7 @@ __interrupt void PORT1_ISR(void)
         case P1IV_P1IFG6 : break;
         case P1IV_P1IFG7 :
             {
-                rightflag+=1;
+                rightflag=1;
                 P1IFG &= ~BIT7;                           // Clear P1.1 IFG
                 break;
             }
